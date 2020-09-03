@@ -105,7 +105,12 @@ void decrypting(FILE **text_file, FILE **decrypted_file, unsigned char key){
 }
 
 void help(){
-	puts("Test");
+	puts("Syntax:\v./CaesarCipher [OPTION] [KEY] [FILENAME]"
+	     "\n\nOptions:\v"
+	     "-e, --encrypt:\vencrypting the file using the key, It create an encrypted file in the directory of the program.\n\t"
+	     "-d, --decrypt:\vdecrypting the file using the key, It create an decrypted file in the directory of the program.\n"
+	     "\nKey: It must be an integer number from 1 to 25.\n"
+	     "\nFilename: the name of the file that will be encypted/decrypted.");
 }
 
 void encrypt(char **argv){
