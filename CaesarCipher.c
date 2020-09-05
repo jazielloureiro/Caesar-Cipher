@@ -5,6 +5,7 @@
 #define KEY argv[2]
 #define FILENAME argv[3]
 
+#define MAX_KEY_SIZE 2
 #define CONTROL_KEY 26
 #define ROW_SIZE 200
 
@@ -12,22 +13,26 @@
 #define INVALID_KEY 0
 
 unsigned char convert_key(char key[]){
-	unsigned char converted_key = 0, i;
+	unsigned char converted_key = 0, key_length = strnlen(key, MAX_KEY_SIZE + 1);
 	
-	for(i = 0; key[i] != '\0'; i++)
-		if(key[i] < '0' || key[i] > '9'|| i > 1)
-			return INVALID_KEY;
-			
-	if(i == 1)
-		converted_key += key[0] - '0';
-	else{
-		converted_key += key[1] - '0';
-		converted_key += (key[0] - '0') * 10;
+	if(key_length <= MAX_KEY_SIZE){
+		char decimal_place = 1, i;
+	
+		for(i = key_length - 1; i >= 0; i--){
+			if(key[i] < '0' || key[i] > '9'){
+				converted_key = INVALID_KEY;
+				break;
+			}else{
+				converted_key += (key[i] - '0') * decimal_place;
+				decimal_place *= 10;
+			}
+		}
 	}
 	
-	if(converted_key < 1 || converted_key > 25)
+	if(converted_key < 1 || converted_key > 25){
+		puts("You've entered an invalid key.");
 		return INVALID_KEY;
-	else
+	}else
 		return converted_key;
 }
 
@@ -117,10 +122,8 @@ void encrypt(char **argv){
 	FILE *text_file, *encrypted_file;
 	unsigned char key = convert_key(KEY);
 	
-	if(key == INVALID_KEY){
-		puts("You've entered an invalid key.");
+	if(key == INVALID_KEY)
 		return;
-	}
 	
 	if(init_text_file(FILENAME, &text_file) == FAILED)
 		return;
@@ -138,10 +141,8 @@ void decrypt(char **argv){
 	FILE *text_file, *decrypted_file;
 	unsigned char key = convert_key(KEY);
 	
-	if(key == INVALID_KEY){
-		puts("You've entered an invalid key.");
+	if(key == INVALID_KEY)
 		return;
-	}
 	
 	if(init_text_file(FILENAME, &text_file) == FAILED)
 		return;

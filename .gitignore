@@ -1,4 +1,5 @@
 
 CaesarCipher
 *.txt
+*.sh
 tests
