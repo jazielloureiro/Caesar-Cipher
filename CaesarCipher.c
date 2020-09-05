@@ -9,6 +9,9 @@
 #define CONTROL_KEY 26
 #define ROW_SIZE 200
 
+#define ENCRYPT 'e'
+#define DECRYPT 'd'
+
 #define FAILED 1
 #define INVALID_KEY 0
 
@@ -63,7 +66,7 @@ char init_decrypted_file(FILE **decrypted_file){
 	}
 }
 
-void encrypting(FILE **text_file, FILE **encrypted_file, unsigned char key){
+void encrypt(FILE **text_file, FILE **encrypted_file, unsigned char key){
 	unsigned char row_text[ROW_SIZE];
 
 	while(fgets(row_text, ROW_SIZE, *text_file) != NULL){
@@ -86,7 +89,7 @@ void encrypting(FILE **text_file, FILE **encrypted_file, unsigned char key){
 	}
 }
 
-void decrypting(FILE **text_file, FILE **decrypted_file, unsigned char key){
+void decrypt(FILE **text_file, FILE **decrypted_file, unsigned char key){
 	unsigned char row_text[ROW_SIZE];
 	
 	while(fgets(row_text, ROW_SIZE, *text_file) != NULL){
@@ -118,42 +121,37 @@ void help(){
 	     "\nFilename: the name of the file that will be encypted/decrypted.");
 }
 
-void encrypt(char **argv){
-	FILE *text_file, *encrypted_file;
+void encryption(char **argv, char operation){
 	unsigned char key = convert_key(KEY);
+	FILE *text_file;
 	
 	if(key == INVALID_KEY)
 		return;
 	
 	if(init_text_file(FILENAME, &text_file) == FAILED)
 		return;
+		
+	if(operation == ENCRYPT){
+		FILE *encrypted_file;
+		
+		if(init_encrypted_file(&encrypted_file) == FAILED)
+			return;
 	
-	if(init_encrypted_file(&encrypted_file) == FAILED)
-		return;
+		encrypt(&text_file, &encrypted_file, key);
+		
+		fclose(encrypted_file);
+	}else{
+		FILE *decrypted_file;
 	
-	encrypting(&text_file, &encrypted_file, key);
+		if(init_decrypted_file(&decrypted_file) == FAILED)
+			return;
 	
-	fclose(text_file);
-	fclose(encrypted_file);
-}
-
-void decrypt(char **argv){
-	FILE *text_file, *decrypted_file;
-	unsigned char key = convert_key(KEY);
-	
-	if(key == INVALID_KEY)
-		return;
-	
-	if(init_text_file(FILENAME, &text_file) == FAILED)
-		return;
-	
-	if(init_decrypted_file(&decrypted_file) == FAILED)
-		return;
-	
-	decrypting(&text_file, &decrypted_file, key);
+		decrypt(&text_file, &decrypted_file, key);
+		
+		fclose(decrypted_file);
+	}
 	
 	fclose(text_file);
-	fclose(decrypted_file);
 }
 
 int main(int argc, char **argv){
@@ -162,9 +160,9 @@ int main(int argc, char **argv){
 	else if(argc > 4)
 		puts("You've entered too many arguments.");
 	else if(strcmp(OPTION, "-e") == 0 || strcmp(OPTION, "--encrypt") == 0)
-		encrypt(argv);
+		encryption(argv, ENCRYPT);
 	else if(strcmp(OPTION, "-d") == 0 || strcmp(OPTION, "--decrypt") == 0)
-		decrypt(argv);
+		encryption(argv, DECRYPT);
 	else
 		puts("You've entered an invalid option.");
 
