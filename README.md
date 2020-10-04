@@ -12,6 +12,7 @@ Type `./CaesarCipher` for opening the help section.
 
 ### Options:
 `-e, --encrypt:` encrypting the file using the key, It create an encrypted file in the directory of the program.
+
 `-d, --decrypt:` decrypting the file using the key, It create an decrypted file in the directory of the program.
 
 ### Key:
