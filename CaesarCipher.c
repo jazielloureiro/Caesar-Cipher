@@ -1,68 +1,52 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define OPTION argv[1]
 #define KEY argv[2]
 #define FILENAME argv[3]
 
-#define MAX_KEY_SIZE 2
-#define CONTROL_KEY 26
-#define ROW_SIZE 200
-
 #define ENCRYPT 'e'
 #define DECRYPT 'd'
 
-#define FAILED 1
-#define INVALID_KEY 0
+#define CONTROL_KEY 26
+#define ROW_SIZE 200
 
-unsigned char convert_key(char key[]){
-	unsigned char converted_key = 0, key_length = strnlen(key, MAX_KEY_SIZE + 1);
-	
-	if(key_length <= MAX_KEY_SIZE){
-		char decimal_place = 1, i;
-	
-		for(i = key_length - 1; i >= 0; i--){
-			if(key[i] < '0' || key[i] > '9'){
-				converted_key = INVALID_KEY;
-				break;
-			}else{
-				converted_key += (key[i] - '0') * decimal_place;
-				decimal_place *= 10;
-			}
-		}
-	}
+unsigned char convert_key(char *key){
+	unsigned char converted_key = atoi(key);
 	
 	if(converted_key < 1 || converted_key > 25){
 		puts("You've entered an invalid key.");
-		return INVALID_KEY;
-	}else
-		return converted_key;
+		exit(EXIT_FAILURE);
+	}
+	
+	return converted_key;
 }
 
-char init_text_file(char filename[], FILE **text_file){
+void init_text_file(char *filename, FILE **text_file){
 	*text_file = fopen(filename, "r");
 
 	if(*text_file == NULL){
 		printf("It wasn't possible to open %s\n", filename);
-		return FAILED;
+		exit(EXIT_FAILURE);
 	}
 }
 
-char init_encrypted_file(FILE **encrypted_file){
+void init_encrypted_file(FILE **encrypted_file){
 	*encrypted_file = fopen("encrypted.txt", "w");
 
 	if(*encrypted_file == NULL){
 		puts("It wasn't possible to create the encrypted file.");
-		return FAILED;
+		exit(EXIT_FAILURE);
 	}
 }
 
-char init_decrypted_file(FILE **decrypted_file){
+void init_decrypted_file(FILE **decrypted_file){
 	*decrypted_file = fopen("decrypted.txt", "w");
 
 	if(*decrypted_file == NULL){
 		puts("It wasn't possible to create the decrypted file.");
-		return FAILED;
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -125,17 +109,12 @@ void encryption(char **argv, char operation){
 	unsigned char key = convert_key(KEY);
 	FILE *text_file;
 	
-	if(key == INVALID_KEY)
-		return;
-	
-	if(init_text_file(FILENAME, &text_file) == FAILED)
-		return;
+	init_text_file(FILENAME, &text_file);
 		
 	if(operation == ENCRYPT){
 		FILE *encrypted_file;
 		
-		if(init_encrypted_file(&encrypted_file) == FAILED)
-			return;
+		init_encrypted_file(&encrypted_file);
 	
 		encrypt(&text_file, &encrypted_file, key);
 		
@@ -143,8 +122,7 @@ void encryption(char **argv, char operation){
 	}else{
 		FILE *decrypted_file;
 	
-		if(init_decrypted_file(&decrypted_file) == FAILED)
-			return;
+		init_decrypted_file(&decrypted_file);
 	
 		decrypt(&text_file, &decrypted_file, key);
 		
