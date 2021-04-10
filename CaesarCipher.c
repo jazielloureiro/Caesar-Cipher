@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,11 +10,8 @@
 #define ENCRYPT 'e'
 #define DECRYPT 'd'
 
-#define CONTROL_KEY 26
-#define ROW_SIZE 200
-
-unsigned char convert_key(char *key){
-	unsigned char converted_key = atoi(key);
+uint8_t convert_key(char *key){
+	uint8_t converted_key = atoi(key);
 	
 	if(converted_key < 1 || converted_key > 25){
 		puts("You've entered an invalid key.");
@@ -34,50 +32,36 @@ FILE *init_file(char *filename, char *mode){
 	return file;
 }
 
-void encrypt(FILE *input, FILE *output, unsigned char key){
-	unsigned char row_text[ROW_SIZE];
+void encryption(char **argv, char operation){
+	const uint8_t CONTROL_KEY = 26;
+	uint8_t key = convert_key(argv[2]);
+	FILE *input = init_file(argv[3], "r"),
+	     *output = init_file(argv[4], "w");
 
-	while(fgets(row_text, ROW_SIZE, input) != NULL){
-		for(unsigned char *i = row_text; *i != '\0'; i++){
-			if(*i >= 'A' && *i <= 'Z'){
-				*i += key;
+	while(1){
+		uint8_t buffer = fgetc(input);
+
+		if(feof(input))
+			break;
+		if(buffer >= 'A' && buffer <= 'Z' || buffer >= 'a' && buffer <= 'z'){
+			if(operation == ENCRYPT){
+				buffer += key;
 				
-				if(*i > 'Z')
-					*i -= CONTROL_KEY;
-			}
-			if(*i >= 'a' && *i <= 'z'){
-				*i += key;
+				if(buffer > 'Z' && buffer - key <= 'Z' || buffer > 'z')
+					buffer -= CONTROL_KEY;
+			}else{
+				buffer -= key;
 				
-				if(*i > 'z')
-					*i -= CONTROL_KEY;
+				if(buffer < 'A' || buffer < 'a' && buffer + key >= 'a')
+					buffer += CONTROL_KEY;
 			}
 		}
 		
-		fputs(row_text, output);
+		fputc(buffer, output);
 	}
-}
 
-void decrypt(FILE *input, FILE *output, unsigned char key){
-	unsigned char row_text[ROW_SIZE];
-	
-	while(fgets(row_text, ROW_SIZE, input) != NULL){
-		for(unsigned char *i = row_text; *i != '\0'; i++){
-			if(*i >= 'A' && *i <= 'Z'){
-				*i -= key;
-				
-				if(*i < 'A')
-					*i += CONTROL_KEY;
-			}
-			if(*i >= 'a' && *i <= 'z'){
-				*i-= key;
-				
-				if(*i < 'a')
-					*i += CONTROL_KEY;
-			}
-		}
-		
-		fputs(row_text, output);
-	}
+	fclose(input);
+	fclose(output);
 }
 
 void help(){
@@ -87,20 +71,6 @@ void help(){
 	     "-d, --decrypt:\vdecrypting the file using the key, It create an decrypted file in the directory of the program.\n"
 	     "\nKey: It must be an integer number from 1 to 25.\n"
 	     "\nFilename: the name of the file that will be encypted/decrypted.");
-}
-
-void encryption(char **argv, char operation){
-	unsigned char key = convert_key(KEY);
-	FILE *input = init_file(argv[3], "r"),
-	     *output = init_file(argv[4], "w");
-		
-	if(operation == ENCRYPT)
-		encrypt(input, output, key);
-	else
-		decrypt(input, output, key);
-	
-	fclose(input);
-	fclose(output);
 }
 
 int main(int argc, char **argv){
