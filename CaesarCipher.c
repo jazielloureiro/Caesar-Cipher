@@ -23,31 +23,15 @@ unsigned char convert_key(char *key){
 	return converted_key;
 }
 
-void init_text_file(char *filename, FILE **text_file){
-	*text_file = fopen(filename, "r");
+FILE *init_file(char *filename, char *mode){
+	FILE *file = fopen(filename, mode);
 
-	if(*text_file == NULL){
-		printf("It wasn't possible to open %s\n", filename);
+	if(file == NULL){
+		printf("It wasn't possible to open the file %s\n", filename);
 		exit(EXIT_FAILURE);
 	}
-}
 
-void init_encrypted_file(FILE **encrypted_file){
-	*encrypted_file = fopen("encrypted.txt", "w");
-
-	if(*encrypted_file == NULL){
-		puts("It wasn't possible to create the encrypted file.");
-		exit(EXIT_FAILURE);
-	}
-}
-
-void init_decrypted_file(FILE **decrypted_file){
-	*decrypted_file = fopen("decrypted.txt", "w");
-
-	if(*decrypted_file == NULL){
-		puts("It wasn't possible to create the decrypted file.");
-		exit(EXIT_FAILURE);
-	}
+	return file;
 }
 
 void encrypt(FILE **text_file, FILE **encrypted_file, unsigned char key){
@@ -107,22 +91,16 @@ void help(){
 
 void encryption(char **argv, char operation){
 	unsigned char key = convert_key(KEY);
-	FILE *text_file;
-	
-	init_text_file(FILENAME, &text_file);
+	FILE *text_file = init_file(FILENAME, "r");
 		
 	if(operation == ENCRYPT){
-		FILE *encrypted_file;
+		FILE *encrypted_file = init_file("encrypted.txt", "w");
 		
-		init_encrypted_file(&encrypted_file);
-	
 		encrypt(&text_file, &encrypted_file, key);
 		
 		fclose(encrypted_file);
 	}else{
-		FILE *decrypted_file;
-	
-		init_decrypted_file(&decrypted_file);
+		FILE *decrypted_file = init_file("decrypted.txt", "w");
 	
 		decrypt(&text_file, &decrypted_file, key);
 		
