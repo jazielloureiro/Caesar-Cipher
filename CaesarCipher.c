@@ -34,10 +34,10 @@ FILE *init_file(char *filename, char *mode){
 	return file;
 }
 
-void encrypt(FILE **text_file, FILE **encrypted_file, unsigned char key){
+void encrypt(FILE *input, FILE *output, unsigned char key){
 	unsigned char row_text[ROW_SIZE];
 
-	while(fgets(row_text, ROW_SIZE, *text_file) != NULL){
+	while(fgets(row_text, ROW_SIZE, input) != NULL){
 		for(unsigned char *i = row_text; *i != '\0'; i++){
 			if(*i >= 'A' && *i <= 'Z'){
 				*i += key;
@@ -53,14 +53,14 @@ void encrypt(FILE **text_file, FILE **encrypted_file, unsigned char key){
 			}
 		}
 		
-		fputs(row_text, *encrypted_file);
+		fputs(row_text, output);
 	}
 }
 
-void decrypt(FILE **text_file, FILE **decrypted_file, unsigned char key){
+void decrypt(FILE *input, FILE *output, unsigned char key){
 	unsigned char row_text[ROW_SIZE];
 	
-	while(fgets(row_text, ROW_SIZE, *text_file) != NULL){
+	while(fgets(row_text, ROW_SIZE, input) != NULL){
 		for(unsigned char *i = row_text; *i != '\0'; i++){
 			if(*i >= 'A' && *i <= 'Z'){
 				*i -= key;
@@ -76,7 +76,7 @@ void decrypt(FILE **text_file, FILE **decrypted_file, unsigned char key){
 			}
 		}
 		
-		fputs(row_text, *decrypted_file);
+		fputs(row_text, output);
 	}
 }
 
@@ -91,30 +91,23 @@ void help(){
 
 void encryption(char **argv, char operation){
 	unsigned char key = convert_key(KEY);
-	FILE *text_file = init_file(FILENAME, "r");
+	FILE *input = init_file(argv[3], "r"),
+	     *output = init_file(argv[4], "w");
 		
-	if(operation == ENCRYPT){
-		FILE *encrypted_file = init_file("encrypted.txt", "w");
-		
-		encrypt(&text_file, &encrypted_file, key);
-		
-		fclose(encrypted_file);
-	}else{
-		FILE *decrypted_file = init_file("decrypted.txt", "w");
+	if(operation == ENCRYPT)
+		encrypt(input, output, key);
+	else
+		decrypt(input, output, key);
 	
-		decrypt(&text_file, &decrypted_file, key);
-		
-		fclose(decrypted_file);
-	}
-	
-	fclose(text_file);
+	fclose(input);
+	fclose(output);
 }
 
 int main(int argc, char **argv){
-	if(argc == 1)
-		help();
-	else if(argc > 4)
+	if(argc > 5)
 		puts("You've entered too many arguments.");
+	else if(argc == 1 || strcmp(OPTION, "-h") == 0 || strcmp(OPTION, "--help") == 0)
+		help();
 	else if(strcmp(OPTION, "-e") == 0 || strcmp(OPTION, "--encrypt") == 0)
 		encryption(argv, ENCRYPT);
 	else if(strcmp(OPTION, "-d") == 0 || strcmp(OPTION, "--decrypt") == 0)
