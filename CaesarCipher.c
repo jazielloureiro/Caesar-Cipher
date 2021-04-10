@@ -3,10 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define OPTION argv[1]
-#define KEY argv[2]
-#define FILENAME argv[3]
-
 #define ENCRYPT 'e'
 #define DECRYPT 'd'
 
@@ -76,11 +72,11 @@ void help(){
 int main(int argc, char **argv){
 	if(argc > 5)
 		puts("You've entered too many arguments.");
-	else if(argc == 1 || strcmp(OPTION, "-h") == 0 || strcmp(OPTION, "--help") == 0)
+	else if(argc == 1 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)
 		help();
-	else if(strcmp(OPTION, "-e") == 0 || strcmp(OPTION, "--encrypt") == 0)
+	else if(strcmp(argv[1], "-e") == 0 || strcmp(argv[1], "--encrypt") == 0)
 		encryption(argv, ENCRYPT);
-	else if(strcmp(OPTION, "-d") == 0 || strcmp(OPTION, "--decrypt") == 0)
+	else if(strcmp(argv[1], "-d") == 0 || strcmp(argv[1], "--decrypt") == 0)
 		encryption(argv, DECRYPT);
 	else
 		puts("You've entered an invalid option.");
