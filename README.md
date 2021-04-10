@@ -1,22 +1,29 @@
 # CaesarCipher
 Implementation of Caesar Cipher in C using command line arguments.
 
-## Compiling
+## Install
+1. Clone this repository:
+
+`$ git clone https://github.com/jazielloureiro/Caesar-Cipher`
+
+2. Go into the respository directory:
+
+`$ cd Caesar-Cipher`
+
+3. And then, compile the source code:
+
 `gcc CaesarCipher.c -o CaesarCipher`
 
 ## Executing
 ### Syntax:
-`./CaesarCipher [OPTION] [KEY] [FILENAME]`
-
-Type `./CaesarCipher` for opening the help section.
+`./CaesarCipher [OPTION] [KEY] [INPUT FILE] [OUTPUT FILE]`
 
 ### Options:
-`-e, --encrypt:` encrypting the file using the key, It create an encrypted file in the directory of the program.
+`-e, --encrypt:` encrypting the input file using the key, It create an encrypted output file in the directory of the program.
 
-`-d, --decrypt:` decrypting the file using the key, It create an decrypted file in the directory of the program.
+`-d, --decrypt:` decrypting the input file using the key, It create a decrypted output file in the directory of the program.
+
+`-h, --help:` show this help and exit.
 
 ### Key:
 The key must be an integer number from 1 to 25.
-
-### Filename:
-The name of the file that will be encypted/decrypted.

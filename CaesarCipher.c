@@ -67,7 +67,7 @@ void help(){
 	     "It create an encrypted output file in the directory of the program.\n\t"
 	     "-d, --decrypt:\n\t\tdecrypting the input file using the key,\n\t\t"
 	     "It create a decrypted output file in the directory of the program.\n\t"
-	     "-h, --help:\n\t\tdisplay this help and exit.\n"
+	     "-h, --help:\n\t\tshow this help and exit.\n"
 	     "\nKey: It must be an integer number from 1 to 25.");
 }
 
