@@ -61,12 +61,14 @@ void encryption(char **argv, char operation){
 }
 
 void help(){
-	puts("Syntax:\v./CaesarCipher [OPTION] [KEY] [FILENAME]"
-	     "\n\nOptions:\v"
-	     "-e, --encrypt:\vencrypting the file using the key, It create an encrypted file in the directory of the program.\n\t"
-	     "-d, --decrypt:\vdecrypting the file using the key, It create an decrypted file in the directory of the program.\n"
-	     "\nKey: It must be an integer number from 1 to 25.\n"
-	     "\nFilename: the name of the file that will be encypted/decrypted.");
+	puts("Syntax:\n\t./CaesarCipher [OPTION] [KEY] [INPUT FILE] [OUTPUT FILE]"
+	     "\n\nOptions:\n\t"
+	     "-e, --encrypt:\n\t\tencrypting the input file using the key,\n\t\t"
+	     "It create an encrypted output file in the directory of the program.\n\t"
+	     "-d, --decrypt:\n\t\tdecrypting the input file using the key,\n\t\t"
+	     "It create a decrypted output file in the directory of the program.\n\t"
+	     "-h, --help:\n\t\tdisplay this help and exit.\n"
+	     "\nKey: It must be an integer number from 1 to 25.");
 }
 
 int main(int argc, char **argv){
