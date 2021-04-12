@@ -14,7 +14,7 @@ Implementation of Caesar Cipher in C using command line arguments.
 
 `gcc CaesarCipher.c -o CaesarCipher`
 
-## Executing
+## Usage
 ### Syntax:
 `./CaesarCipher [OPTION] [KEY] [INPUT FILE] [OUTPUT FILE]`
 
