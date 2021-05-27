@@ -1,5 +1,5 @@
 *.swp
-CaesarCipher
+caesar
 *.txt
 *.sh
 tests
