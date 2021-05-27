@@ -10,7 +10,7 @@ uint8_t convert_key(char *key){
 	uint8_t converted_key = atoi(key);
 	
 	if(converted_key < 1 || converted_key > 25){
-		puts("You've entered an invalid key.");
+		puts("Error: invalid key.\nTry 'caesar --help'");
 		exit(EXIT_FAILURE);
 	}
 	
@@ -72,16 +72,18 @@ void help(){
 }
 
 int main(int argc, char **argv){
-	if(argc > 5)
-		puts("You've entered too many arguments.");
-	else if(argc == 1 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)
+	if(argc == 1)
 		help();
+	else if(argc == 2 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0))
+		help();
+	else if(argc != 5)
+		puts("Error: invalid number of arguments.\nTry 'caesar --help'");
 	else if(strcmp(argv[1], "-e") == 0 || strcmp(argv[1], "--encrypt") == 0)
 		encryption(argv, ENCRYPT);
 	else if(strcmp(argv[1], "-d") == 0 || strcmp(argv[1], "--decrypt") == 0)
 		encryption(argv, DECRYPT);
 	else
-		puts("You've entered an invalid option.");
+		puts("Error: unrecognized option.\nTry 'caesar --help'");
 
 	return 0;
 }
