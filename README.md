@@ -1,29 +1,40 @@
-# CaesarCipher
-Implementation of Caesar Cipher in C using command line arguments.
+# Caesar Cipher
 
-## Install
+Implementation of Caesar Cipher in C.
+
+## Installation
+
 1. Clone this repository:
 
-`$ git clone https://github.com/jazielloureiro/Caesar-Cipher`
+```sh
+git clone https://github.com/jazielloureiro/Caesar-Cipher
+```
 
-2. Go into the respository directory:
+2. Go into the new directory and compile the source code:
 
-`$ cd Caesar-Cipher`
-
-3. And then, compile the source code:
-
-`gcc CaesarCipher.c -o CaesarCipher`
+```sh
+cd Caesar-Cipher && gcc caesar.c -o caesar
+```
 
 ## Usage
-### Syntax:
-`./CaesarCipher [OPTION] [KEY] [INPUT FILE] [OUTPUT FILE]`
+
+```
+caesar <options> <key> <input file> <output file>
+caesar [-h | --help]
+```
 
 ### Options:
-`-e, --encrypt:` encrypting the input file using the key, It create an encrypted output file in the directory of the program.
 
-`-d, --decrypt:` decrypting the input file using the key, It create a decrypted output file in the directory of the program.
+`-e, --encrypt`: encrypt the input file using the key.
 
-`-h, --help:` show this help and exit.
+`-d, --decrypt`: decrypt the input file using the key.
+
+`-h, --help`: print usage message.
 
 ### Key:
+
 The key must be an integer number from 1 to 25.
+
+## License
+
+[MIT](https://github.com/jazielloureiro/Caesar-Cipher/blob/master/LICENSE)
